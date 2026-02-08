@@ -6,10 +6,10 @@ This project implements the complete Voodoo 1 3D graphics pipeline in synthesiza
 
 ## Video
 
-[![Voodoo FPGA Demo](https://img.youtube.com/vi/hXsq-mxo13E/0.jpg)](https://www.youtube.com/watch?v=hXsq-mxo13E)
-[![Voodoo FPGA Demo](https://img.youtube.com/vi/Vb6TGa_9cuo/0.jpg)](https://www.youtube.com/watch?v=Vb6TGa_9cuo)
-[![Voodoo FPGA Demo](https://img.youtube.com/vi/hkKlEKxrMDQ/0.jpg)](https://www.youtube.com/watch?v=hkKlEKxrMDQ)
-[![Voodoo FPGA Demo](https://img.youtube.com/vi/mtOpSOZ3h8I/0.jpg)](https://www.youtube.com/watch?v=mtOpSOZ3h8I)
+<a href="https://www.youtube.com/watch?v=hXsq-mxo13E"><img src="https://img.youtube.com/vi/hXsq-mxo13E/0.jpg" width="320"></a>
+<a href="https://www.youtube.com/watch?v=Vb6TGa_9cuo"><img src="https://img.youtube.com/vi/Vb6TGa_9cuo/0.jpg" width="320"></a>
+<a href="https://www.youtube.com/watch?v=hkKlEKxrMDQ"><img src="https://img.youtube.com/vi/hkKlEKxrMDQ/0.jpg" width="320"></a>
+<a href="https://www.youtube.com/watch?v=mtOpSOZ3h8I"><img src="https://img.youtube.com/vi/mtOpSOZ3h8I/0.jpg" width="320"></a>
 
 ## Screenshots
 
