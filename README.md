@@ -44,7 +44,7 @@ This project implements the complete Voodoo 1 3D graphics pipeline in synthesiza
 
 ## Simulation
 
-The design is verified using [Verilator](https://github.com/verilator/verilator). A PCem bridge testbench connects the RTL to PCem over shared memory, replacing its software Voodoo emulation with the RTL design. This allows real Glide 2.x applications running inside PCem to drive the hardware simulation and display rendered output via SDL in real time.
+The design is verified using [Verilator](https://github.com/verilator/verilator). A PCem bridge testbench connects the RTL to PCem over shared memory, [replacing](https://github.com/victor-fisyuk/pcem/blob/voodoo-fpga/src/video/vid_voodoo_fpga_bridge.c) its software Voodoo emulation with the RTL design. This allows real Glide 2.x applications running inside PCem to drive the hardware simulation and display rendered output via SDL in real time.
 
 ## Status
 
