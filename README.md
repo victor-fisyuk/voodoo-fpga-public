@@ -13,6 +13,12 @@ This project implements the complete Voodoo 1 3D graphics pipeline in synthesiza
 
 ## Screenshots
 
+### Games
+
+| | |
+|:---:|:---:|
+| ![Quake 2](screenshots/quake2.png) | |
+
 ### 3dfx Demo Programs
 
 | | |
