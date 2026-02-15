@@ -19,6 +19,7 @@ This project implements the complete Voodoo 1 3D graphics pipeline in synthesiza
 |:---:|:---:|
 | ![Unreal Tournament](screenshots/unreal_tournament_1.png) | ![Unreal Tournament](screenshots/unreal_tournament_2.png) |
 | ![Unreal Tournament](screenshots/unreal_tournament_3.png) | ![Quake 2](screenshots/quake2.png) |
+| ![3DMark99](screenshots/3dmark99_1.png) | ![3DMark99](screenshots/3dmark99_2.png) |
 
 ### 3dfx Demo Programs
 
