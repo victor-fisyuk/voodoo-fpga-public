@@ -29,13 +29,13 @@ This project implements the complete Voodoo 1 3D graphics pipeline in synthesiza
 | ![Anubis](screenshots/anubis.png) | ![Beethoven Bust](screenshots/ludwig.png) |
 | ![Martini Glass](screenshots/martini.png) | ![Dragon](screenshots/dragon.png) |
 | ![VW](screenshots/vw.png) | ![Teapot](screenshots/teapot.png) |
+| ![Textured Cube](screenshots/texcube.png) | ![Gouraud Cube](screenshots/cube.png) |
 
 ### Glide SDK Test Programs
 
 | | |
 |:---:|:---:|
 | ![3dfx Splash Screen](screenshots/splash_screen_2.png) | ![3dfx Splash Screen](screenshots/splash_screen_1.png) |
-| ![Textured Cube](screenshots/texcube.png) | ![Gouraud Cube](screenshots/cube.png) |
 | ![Texture Lighting](screenshots/texture_lighting_modes_1.png) | ![Texture Lighting](screenshots/texture_lighting_modes_2.png) |
 | ![Texture Lighting](screenshots/texture_lighting_modes_3.png) | ![Texture Lighting](screenshots/texture_lighting_modes_4.png) |
 | ![Texture Lighting](screenshots/texture_lighting_modes_5.png) | ![Texture Alpha](screenshots/texture_alpha.png) |
