@@ -6,6 +6,7 @@ This project implements the complete Voodoo 1 3D graphics pipeline in synthesiza
 
 ## Video
 
+<a href="https://www.youtube.com/watch?v=CwztiOZkOVs"><img src="https://img.youtube.com/vi/CwztiOZkOVs/0.jpg" width="320"></a>
 <a href="https://www.youtube.com/watch?v=hXsq-mxo13E"><img src="https://img.youtube.com/vi/hXsq-mxo13E/0.jpg" width="320"></a>
 <a href="https://www.youtube.com/watch?v=Vb6TGa_9cuo"><img src="https://img.youtube.com/vi/Vb6TGa_9cuo/0.jpg" width="320"></a>
 <a href="https://www.youtube.com/watch?v=hkKlEKxrMDQ"><img src="https://img.youtube.com/vi/hkKlEKxrMDQ/0.jpg" width="320"></a>
@@ -17,8 +18,9 @@ This project implements the complete Voodoo 1 3D graphics pipeline in synthesiza
 
 | | |
 |:---:|:---:|
-| ![Unreal Tournament](screenshots/unreal_tournament_1.png) | ![Unreal Tournament](screenshots/unreal_tournament_2.png) |
-| ![Unreal Tournament](screenshots/unreal_tournament_3.png) | ![Quake 2](screenshots/quake2.png) |
+| ![Unreal Tournament](screenshots/unreal_tournament_1.png) | ![Unreal Tournament](screenshots/unreal_tournament_4.png) |
+| ![Unreal Tournament](screenshots/unreal_tournament_2.png) | ![Unreal Tournament](screenshots/unreal_tournament_3.png) |
+| ![Need for Speed II](screenshots/need_for_speed_II.png) | ![Quake 2](screenshots/quake2.png) |
 | ![3DMark99](screenshots/3dmark99_1.png) | ![3DMark99](screenshots/3dmark99_2.png) |
 
 ### 3dfx Demo Programs
