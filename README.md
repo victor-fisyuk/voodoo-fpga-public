@@ -59,8 +59,9 @@ This project implements the complete Voodoo 1 3D graphics pipeline in synthesiza
 | **Code size** | ~18,000 lines, 20+ RTL modules |
 | **Synthesis** | Open-source toolchain (Yosys, yosys-slang, nextpnr-ecp5) |
 | **Verification** | Verilator testbenches, Glide trace replay, PCem bridge for real-time verification |
-| **Clocks** | 25.175 MHz VGA output, 50 MHz render pipeline, 100 MHz SDRAM subsystem with per-client CDC bridges |
+| **Clocks** | 25.175 MHz VGA output, 50 MHz render pipeline, 100 MHz SDRAM subsystem with per-client CDC bridges. Timing closure achieved through deep pipelining, basic floorplanning, etc. |
 | **Memory subsystem** | Custom SDRAM controller, 7-client arbiter with bank interleaving, 4-level cache hierarchy (texture, depth, FB write-combining, FB read) |
+| **FPGA resources** | 68% LUTs, 38% FFs, 37% BRAM, 70% DSP (ECP5-85F) |
 
 ## Simulation
 
@@ -68,7 +69,11 @@ The design is verified using [Verilator](https://github.com/verilator/verilator)
 
 ## Status
 
-Work in progress. The 3D rendering pipeline is functional and runs Glide 2.x demo programs correctly in simulation. FPGA synthesis and place-and-route are complete, hardware testing is the next step.
+Started in August 2025. First 3D render (teapot) in October 2025. Valley of Ra demo and Unreal Tournament running in February 2026. ECP5-85F synthesis and place-and-route with timing closure at 50/100 MHz in March 2026.
+
+Work in progress. The 3D rendering pipeline is functional and runs Glide 2.x games correctly in simulation. FPGA synthesis and place-and-route are complete, hardware testing is the next step.
+
+All code written by [Claude Code](https://claude.ai).
 
 This is not an open source project. The source code is not publicly available.
 
