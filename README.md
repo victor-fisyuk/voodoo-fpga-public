@@ -47,13 +47,28 @@ This project implements the complete Voodoo 1 3D graphics pipeline in synthesiza
 | ![Depth Bias](screenshots/depth_bias.png) | ![Iterated Alpha](screenshots/iterated_alpha.png) |
 | ![Gouraud Triangle](screenshots/gouraud_triangle.png) | ![Line Drawing](screenshots/draw_lines.png) |
 
+## Technical Overview
+
+| | |
+|---|---|
+| **Voodoo variant** | Voodoo 1 (SST-1) only |
+| **Pipeline** | Highly pipelined: rasterizer → TMU (32-stage) → pixel shader (10-stage) → depth buffer (3-stage) → framebuffer (3-stage), valid/ready handshaking with inter-stage FIFOs |
+| **FPGA target** | ULX3S (Lattice ECP5 LFE5U-85F, 32MB SDRAM) |
+| **Display** | VGA display controller with SDRAM prefetch buffer |
+| **Language** | SystemVerilog |
+| **Code size** | ~18,000 lines, 20+ RTL modules |
+| **Synthesis** | Open-source toolchain (Yosys, yosys-slang, nextpnr-ecp5) |
+| **Verification** | Verilator testbenches, Glide trace replay, PCem bridge for real-time verification |
+| **Clocks** | 25.175 MHz VGA output, 50 MHz render pipeline, 100 MHz SDRAM subsystem with per-client CDC bridges |
+| **Memory subsystem** | Custom SDRAM controller, 7-client arbiter with bank interleaving, 4-level cache hierarchy (texture, depth, FB write-combining, FB read) |
+
 ## Simulation
 
-The design is verified using [Verilator](https://github.com/verilator/verilator). A PCem bridge testbench connects the RTL to PCem over shared memory, [replacing](https://github.com/victor-fisyuk/pcem/blob/voodoo-fpga/src/video/vid_voodoo_fpga_bridge.c) its software Voodoo emulation with the RTL design. This allows real Glide 2.x applications running inside PCem to drive the hardware simulation and display rendered output via SDL in real time.
+The design is verified using [Verilator](https://github.com/verilator/verilator). A PCem bridge testbench connects the RTL to PCem over shared memory, [replacing](https://github.com/victor-fisyuk/pcem/blob/voodoo-fpga/src/video/vid_voodoo_fpga_bridge.c) its software Voodoo emulation with the RTL design. This allows real Glide 2.x games running inside PCem to drive the hardware simulation and display rendered output via SDL in real time.
 
 ## Status
 
-Work in progress. The 3D rendering pipeline is functional and runs Glide 2.x demo programs correctly in simulation. FPGA synthesis and hardware testing are next steps.
+Work in progress. The 3D rendering pipeline is functional and runs Glide 2.x demo programs correctly in simulation. FPGA synthesis and place-and-route are complete, hardware testing is the next step.
 
 This is not an open source project. The source code is not publicly available.
 
