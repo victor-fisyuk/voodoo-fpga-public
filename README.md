@@ -11,6 +11,7 @@ This project implements the complete Voodoo 1 3D graphics pipeline in synthesiza
 <a href="https://www.youtube.com/watch?v=Vb6TGa_9cuo"><img src="https://img.youtube.com/vi/Vb6TGa_9cuo/0.jpg" width="320"></a>
 <a href="https://www.youtube.com/watch?v=hkKlEKxrMDQ"><img src="https://img.youtube.com/vi/hkKlEKxrMDQ/0.jpg" width="320"></a>
 <a href="https://www.youtube.com/watch?v=mtOpSOZ3h8I"><img src="https://img.youtube.com/vi/mtOpSOZ3h8I/0.jpg" width="320"></a>
+<a href="https://www.youtube.com/watch?v=dOeNav5UjCw"><img src="https://img.youtube.com/vi/dOeNav5UjCw/0.jpg" width="320"></a>
 
 ## Screenshots
 
@@ -71,11 +72,13 @@ The design is verified using [Verilator](https://github.com/verilator/verilator)
 
 Started in August 2025. First 3D render (teapot) in October 2025. Valley of Ra demo and Unreal Tournament running in February 2026. ECP5-85F synthesis and place-and-route with timing closure at 50/100 MHz in March 2026.
 
-Work in progress. The 3D rendering pipeline is functional and runs Glide 2.x games correctly in simulation. FPGA synthesis and place-and-route are complete, hardware testing is the next step.
+Work in progress. The 3D rendering pipeline is functional and runs Glide 2.x games correctly in simulation. FPGA synthesis and place-and-route are [complete](https://www.youtube.com/watch?v=dOeNav5UjCw), host to FPGA transport implementation and hardware testing are the next steps.
 
 All code written by [Claude Code](https://claude.ai).
 
 This is not an open source project. The source code is not publicly available.
+
+<img src="screenshots/commits.png" width="400">
 
 ## Copyright
 
