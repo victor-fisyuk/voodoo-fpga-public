@@ -62,16 +62,16 @@ The design running on real hardware: a ULX3S board with a Lattice ECP5 FPGA, dri
 | | |
 |---|---|
 | **Voodoo variant** | Voodoo 1 (SST-1) only |
-| **Pipeline** | Highly pipelined: rasterizer → TMU (32-stage) → pixel shader (10-stage) → depth buffer (3-stage) → framebuffer (3-stage), valid/ready handshaking with inter-stage FIFOs |
+| **Pipeline** | Highly pipelined: rasterizer → TMU (32-stage) → pixel shader (9-stage) → depth buffer (3-stage) → framebuffer (3-stage), valid/ready handshaking with inter-stage FIFOs |
 | **FPGA target** | ULX3S (Lattice ECP5 LFE5U-85F, 32MB SDRAM) |
-| **Display** | HDMI display controller with SDRAM prefetch buffer |
+| **Display** | 640×480@60Hz HDMI (DVI-D), RGB565 framebuffer, 8-line circular SDRAM prefetch FIFO |
 | **Language** | SystemVerilog |
-| **Code size** | ~18,000 lines, 20+ RTL modules |
+| **Code size** | ~22,000 lines, 24 RTL modules |
 | **Synthesis** | Open-source toolchain (Yosys, yosys-slang, nextpnr-ecp5) |
 | **Verification** | Verilator testbenches, Glide trace replay, PCem bridge for real-time verification |
-| **Clocks** | 25 MHz VGA/HDMI pixel output (125 MHz TMDS shift), 50 MHz render pipeline, 100 MHz SDRAM subsystem with per-client CDC bridges. Timing closure achieved through deep pipelining and basic floorplanning. |
-| **Memory subsystem** | Custom SDRAM controller, 7-client arbiter with bank interleaving, 4-level cache hierarchy (texture, depth, FB write-combining, FB read) |
-| **FPGA resources** | 68% LUTs, 38% FFs, 37% BRAM, 70% DSP (ECP5-85F) |
+| **Clocks** | 25 MHz VGA/HDMI pixel output (125 MHz TMDS shift), 50 MHz render pipeline, 100 MHz SDRAM subsystem with per-client clock-domain-crossing (CDC) bridges. Timing closure achieved through deep pipelining and floorplanning. |
+| **Memory subsystem** | Custom SDRAM controller @ 100 MHz, 7-client arbiter with per-bank assignment (front/back/Z/texture) and bank interleaving to overlap command overhead with data, 4-level cache hierarchy (texture, depth, FB write-combining, FB read) |
+| **FPGA resources** | 61% LUTs, 38% FFs, 39% BRAM, 70% DSP (ECP5-85F) |
 
 ## Simulation
 
@@ -79,9 +79,11 @@ The design is verified using [Verilator](https://github.com/verilator/verilator)
 
 ## Status
 
-Started in August 2025. First 3D render (teapot) in October 2025. Valley of Ra demo and Unreal Tournament running in February 2026. ECP5-85F synthesis and place-and-route with timing closure at 50/100 MHz in March 2026.
+Started in August 2025. First 3D render (teapot) in October 2025. Valley of Ra demo and Unreal Tournament running in February 2026. ECP5-85F synthesis and place-and-route with timing closure at 50/100 MHz in March 2026. First bring-up on the ULX3S board with HDMI output in April 2026.
 
-Work in progress. The 3D rendering pipeline is functional and runs Glide 2.x games correctly in simulation. FPGA synthesis and place-and-route are [complete](https://www.youtube.com/watch?v=dOeNav5UjCw), host to FPGA transport implementation and hardware testing are the next steps.
+The 3D rendering pipeline is functional and runs Glide 2.x games correctly in simulation, place-and-route is [complete](https://www.youtube.com/watch?v=dOeNav5UjCw), and the design is now [running](https://www.youtube.com/watch?v=yVUgWq6bWg8) on the ULX3S board.
+
+Long-term, the goal is to retarget to a PCIe + DDR FPGA card. The ULX3S build is constrained by a shared 16-bit SDR SDRAM port and a 2 Mbaud UART host link; PCIe and DDR lift both ceilings and put playable frame rates within reach.
 
 All code written by [Claude Code](https://claude.ai).
 
