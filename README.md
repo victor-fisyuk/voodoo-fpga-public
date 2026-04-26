@@ -4,6 +4,15 @@ A SystemVerilog reimplementation of the 3dfx Voodoo Graphics GPU for FPGA.
 
 This project implements the complete Voodoo 1 3D graphics pipeline in synthesizable RTL. The implementation is based on analysis of the original hardware specifications and the [PCem](https://github.com/sarah-walker-pcem/pcem) emulator's Voodoo emulation code.
 
+## Voodoo on ULX3S FPGA
+
+The design running on real hardware: a ULX3S board with a Lattice ECP5 FPGA, driving an HDMI monitor.
+
+| | |
+|:---:|:---:|
+| <img src="screenshots/ulx3s.jpg" width="320"> | |
+| <a href="https://www.youtube.com/watch?v=yVUgWq6bWg8"><img src="https://img.youtube.com/vi/yVUgWq6bWg8/0.jpg" width="320"></a> | <a href="https://www.youtube.com/watch?v=UybjJaZkl9c"><img src="https://img.youtube.com/vi/UybjJaZkl9c/0.jpg" width="320"></a> |
+
 ## Video
 
 <a href="https://www.youtube.com/watch?v=CwztiOZkOVs"><img src="https://img.youtube.com/vi/CwztiOZkOVs/0.jpg" width="320"></a>
@@ -55,12 +64,12 @@ This project implements the complete Voodoo 1 3D graphics pipeline in synthesiza
 | **Voodoo variant** | Voodoo 1 (SST-1) only |
 | **Pipeline** | Highly pipelined: rasterizer → TMU (32-stage) → pixel shader (10-stage) → depth buffer (3-stage) → framebuffer (3-stage), valid/ready handshaking with inter-stage FIFOs |
 | **FPGA target** | ULX3S (Lattice ECP5 LFE5U-85F, 32MB SDRAM) |
-| **Display** | VGA display controller with SDRAM prefetch buffer |
+| **Display** | HDMI display controller with SDRAM prefetch buffer |
 | **Language** | SystemVerilog |
 | **Code size** | ~18,000 lines, 20+ RTL modules |
 | **Synthesis** | Open-source toolchain (Yosys, yosys-slang, nextpnr-ecp5) |
 | **Verification** | Verilator testbenches, Glide trace replay, PCem bridge for real-time verification |
-| **Clocks** | 25.175 MHz VGA output, 50 MHz render pipeline, 100 MHz SDRAM subsystem with per-client CDC bridges. Timing closure achieved through deep pipelining, basic floorplanning, etc. |
+| **Clocks** | 25 MHz VGA/HDMI pixel output (125 MHz TMDS shift), 50 MHz render pipeline, 100 MHz SDRAM subsystem with per-client CDC bridges. Timing closure achieved through deep pipelining and basic floorplanning. |
 | **Memory subsystem** | Custom SDRAM controller, 7-client arbiter with bank interleaving, 4-level cache hierarchy (texture, depth, FB write-combining, FB read) |
 | **FPGA resources** | 68% LUTs, 38% FFs, 37% BRAM, 70% DSP (ECP5-85F) |
 
