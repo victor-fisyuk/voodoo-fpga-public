@@ -8,12 +8,16 @@ This project implements the complete Voodoo 1 3D graphics pipeline in synthesiza
 
 The design running on real hardware: a [Radiona ULX3S](https://radiona.org/ulx3s/) board with a Lattice ECP5 FPGA, driving an HDMI monitor.
 
-Observed frame rate on the ULX3S is below 1 FPS, because the host link is a 2 Mbaud UART used for debugging and testing. Even with a fast host-to-FPGA link the ceiling would only rise to roughly 5 FPS (simulation estimate). The real bottleneck is the board's single 16-bit SDR SDRAM chip, shared between framebuffer reads and writes, depth, texture, and the display controller. Long-term, the goal is to retarget to a PCIe + DDR FPGA card; PCIe and DDR lift both ceilings and put playable frame rates within reach.
+To measure the genuine speed of the FPGA Voodoo core itself, a pre-recorded Quake II Glide command stream was replayed directly from an SD card, bypassing the host link entirely. In this mode Quake II runs at about 3 FPS on the ULX3S — the actual throughput of the Voodoo pipeline on this board.
+
+With a host PC driving the FPGA over the 2 Mbaud UART debug link, the observed frame rate drops below 1 FPS: the UART is the dominant bottleneck in that setup.
+
+The real bottleneck is the board's single 16-bit SDR SDRAM chip, shared between framebuffer reads and writes, depth, texture, and the display controller. Long-term, the goal is to retarget to a PCIe + DDR FPGA card; PCIe and DDR lift both ceilings and put playable frame rates within reach.
 
 | | |
 |:---:|:---:|
 | <img src="screenshots/ulx3s.jpg" width="320"> | |
-| <a href="https://www.youtube.com/watch?v=yVUgWq6bWg8"><img src="https://img.youtube.com/vi/yVUgWq6bWg8/0.jpg" width="320"></a> | <a href="https://www.youtube.com/watch?v=UybjJaZkl9c"><img src="https://img.youtube.com/vi/UybjJaZkl9c/0.jpg" width="320"></a> |
+| <a href="https://www.youtube.com/watch?v=_Ttfazh5eC8"><img src="https://img.youtube.com/vi/_Ttfazh5eC8/0.jpg" width="320"></a> | <a href="https://www.youtube.com/watch?v=UybjJaZkl9c"><img src="https://img.youtube.com/vi/UybjJaZkl9c/0.jpg" width="320"></a> |
 
 ## Video
 
@@ -83,7 +87,7 @@ The design is verified using [Verilator](https://github.com/verilator/verilator)
 
 Started in August 2025. First 3D render (teapot) in October 2025. Valley of Ra demo and Unreal Tournament running in February 2026. ECP5-85F synthesis and place-and-route with timing closure at 50/100 MHz in March 2026. First bring-up on the ULX3S board with HDMI output in April 2026.
 
-The 3D rendering pipeline is functional and runs Glide 2.x games correctly, place-and-route is [complete](https://www.youtube.com/watch?v=dOeNav5UjCw), and the design is now [running](https://www.youtube.com/watch?v=yVUgWq6bWg8) on the ULX3S board.
+The 3D rendering pipeline is functional and runs Glide 2.x games correctly, place-and-route is [complete](https://www.youtube.com/watch?v=dOeNav5UjCw), and the design is now [running](https://www.youtube.com/watch?v=_Ttfazh5eC8) on the ULX3S board.
 
 All code written by [Claude Code](https://claude.ai).
 
