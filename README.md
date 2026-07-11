@@ -8,9 +8,9 @@ This project implements the complete Voodoo 1 3D graphics pipeline in synthesiza
 
 The design running on real hardware: a [Radiona ULX3S](https://radiona.org/ulx3s/) board with a Lattice ECP5 FPGA, driving an HDMI monitor.
 
-The Voodoo core was recently re-architected to run faster and to follow the original Voodoo 1 hardware more closely. The rendering pipeline and the SDRAM subsystem, which previously ran on separate clocks (a 50 MHz pipeline and a 100 MHz memory subsystem), now share a single 71.43 MHz clock domain. The intermediate rendering caches (texture, depth, and framebuffer) were removed entirely — every pipeline stage now reads and writes SDRAM directly through a fully-pipelined, per-client arbiter. Previously a cache miss stalled the whole pipeline until the data arrived; now each stage issues its memory accesses without blocking and hides the SDRAM latency, so a slow memory access no longer stalls the work behind it. The rasterizer, depth, and framebuffer stages were also pipelined more deeply.
+The Voodoo core was recently re-architected to run faster and to follow the original Voodoo 1 hardware more closely. The rendering pipeline and the SDRAM subsystem, which previously ran on separate clocks (a 50 MHz pipeline and a 100 MHz memory subsystem), now share a single clock domain that has been progressively raised — currently 83.33 MHz — through deeper pipelining, registered-DSP retiming, and floorplanning. The intermediate rendering caches (texture, depth, and framebuffer) were removed entirely — every pipeline stage now reads and writes SDRAM directly through a fully-pipelined, per-client arbiter. Previously a cache miss stalled the whole pipeline until the data arrived; now each stage issues its memory accesses without blocking and hides the SDRAM latency, so a slow memory access no longer stalls the work behind it. The rasterizer, depth, and framebuffer stages were also pipelined more deeply.
 
-To measure the genuine speed of the FPGA Voodoo core itself, a pre-recorded Tomb Raider Glide command stream was replayed directly from an SD card, bypassing the host link entirely. In this mode Tomb Raider runs at about 5-12 FPS on the ULX3S — the actual throughput of the Voodoo pipeline on this board.
+To measure the genuine speed of the FPGA Voodoo core itself, a pre-recorded Tomb Raider Glide command stream was replayed directly from an SD card, bypassing the host link entirely. In this mode the game runs at about 7-13 FPS in gameplay on the ULX3S — the actual throughput of the Voodoo pipeline on this board — and around 20 FPS on the much simpler title screen.
 
 With a host PC driving the FPGA over the 2 Mbaud UART debug link, the observed frame rate drops below 1 FPS: the UART is the dominant bottleneck in that setup.
 
@@ -74,12 +74,12 @@ The real bottleneck is the board's single 16-bit SDR SDRAM chip, shared between 
 | **FPGA target** | ULX3S (Lattice ECP5 LFE5U-85F, 32MB SDRAM) |
 | **Display** | 640×480@60Hz HDMI (DVI-D), RGB565 framebuffer, 8-line circular SDRAM prefetch FIFO |
 | **Language** | SystemVerilog |
-| **Code size** | ~24,500 lines, 39 RTL modules |
+| **Code size** | ~24,400 lines, 44 RTL modules |
 | **Synthesis** | Open-source toolchain (Yosys, yosys-slang, nextpnr-ecp5) |
 | **Verification** | Verilator testbenches, Glide trace replay, PCem bridge for real-time verification |
-| **Clocks** | 25 MHz VGA/HDMI pixel output (125 MHz TMDS shift); single 71.43 MHz render + SDRAM clock domain. Timing closure achieved through deep pipelining and floorplanning. |
-| **Memory subsystem** | Custom SDRAM controller @ 71.43 MHz (CL=3), 7-client fully-pipelined arbiter with per-client request FIFOs and address-derived bank interleaving to overlap command overhead with data. Each pipeline stage accesses SDRAM directly — no rendering caches — matching the original Voodoo 1 architecture. |
-| **FPGA resources** | 71% LUTs, 59% FFs, 45% BRAM, 53% DSP (ECP5-85F) |
+| **Clocks** | 25 MHz VGA/HDMI pixel output (125 MHz TMDS shift); single 83.33 MHz render + SDRAM clock domain. Timing closure achieved through deep pipelining, registered-DSP retiming, and floorplanning. |
+| **Memory subsystem** | Custom SDRAM controller on the shared render clock (CL=3), 7-client fully-pipelined arbiter with per-client request FIFOs and address-derived bank interleaving to overlap command overhead with data. Each pipeline stage accesses SDRAM directly — no rendering caches — matching the original Voodoo 1 architecture. |
+| **FPGA resources** | 55% LUTs, 48% FFs, 51% BRAM, 59% DSP (ECP5-85F) |
 
 ## Simulation
 
