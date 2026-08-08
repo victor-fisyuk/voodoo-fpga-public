@@ -8,9 +8,9 @@ This project implements the complete Voodoo 1 3D graphics pipeline in synthesiza
 
 The design running on real hardware: a [Radiona ULX3S](https://radiona.org/ulx3s/) board with a Lattice ECP5 FPGA, driving an HDMI monitor.
 
-The Voodoo core was recently re-architected to run faster and to follow the original Voodoo 1 hardware more closely. The rendering pipeline and the SDRAM subsystem, which previously ran on separate clocks (a 50 MHz pipeline and a 100 MHz memory subsystem), now share a single clock domain that has been progressively raised — currently 91.67 MHz — through deeper pipelining, registered-DSP retiming, and floorplanning. The intermediate rendering caches (texture, depth, and framebuffer) were removed entirely — every pipeline stage now reads and writes SDRAM directly through a fully-pipelined, per-client arbiter. Previously a cache miss stalled the whole pipeline until the data arrived; now each stage issues its memory accesses without blocking and hides the SDRAM latency, so a slow memory access no longer stalls the work behind it. The rasterizer, depth, and framebuffer stages were also pipelined more deeply.
+The Voodoo core was re-architected to run faster and to follow the original Voodoo 1 hardware more closely. The rendering pipeline and the SDRAM subsystem, which previously ran on separate clocks (a 50 MHz pipeline and a 100 MHz memory subsystem), now share a single clock domain that has been progressively raised — currently **100&nbsp;MHz** — through deeper pipelining, registered-DSP retiming, and floorplanning. The intermediate rendering caches (texture, depth, and framebuffer) were removed entirely — every pipeline stage now reads and writes SDRAM directly through a fully-pipelined, per-client arbiter. Previously a cache miss stalled the whole pipeline until the data arrived; now each stage issues its memory accesses without blocking and hides the SDRAM latency, so a slow memory access no longer stalls the work behind it.
 
-To measure the genuine speed of the FPGA Voodoo core itself, a pre-recorded Tomb Raider Glide command stream was replayed directly from an SD card, bypassing the host link entirely. In this mode the game runs at about 7-15 FPS in gameplay on the ULX3S — the actual throughput of the Voodoo pipeline on this board — and 20 FPS on the much simpler title screen.
+To measure the genuine speed of the FPGA Voodoo core itself, a pre-recorded Tomb Raider Glide command stream was replayed directly from an SD card, bypassing the host link entirely. In this mode the game runs at about 8-15 FPS in gameplay on the ULX3S — the actual throughput of the Voodoo pipeline on this board — and 30 FPS on the much simpler title screen.
 
 With a host PC driving the FPGA over the 2 Mbaud UART debug link, the observed frame rate drops below 1 FPS: the UART is the dominant bottleneck in that setup.
 
@@ -18,8 +18,9 @@ The real bottleneck is the board's single 16-bit SDR SDRAM chip, shared between 
 
 | | |
 |:---:|:---:|
-| <img src="screenshots/ulx3s.jpg" width="320"> | <a href="https://www.youtube.com/watch?v=KTbq-G3HOOc"><img src="https://img.youtube.com/vi/KTbq-G3HOOc/0.jpg" width="320"></a> |
-| <a href="https://www.youtube.com/watch?v=_Ttfazh5eC8"><img src="https://img.youtube.com/vi/_Ttfazh5eC8/0.jpg" width="320"></a> | <a href="https://www.youtube.com/watch?v=UybjJaZkl9c"><img src="https://img.youtube.com/vi/UybjJaZkl9c/0.jpg" width="320"></a> |
+| <img src="screenshots/ulx3s.jpg" width="320"> | <a href="https://www.youtube.com/watch?v=kYiTO4DXEKA"><img src="https://img.youtube.com/vi/kYiTO4DXEKA/0.jpg" width="320"></a> |
+| <a href="https://www.youtube.com/watch?v=KTbq-G3HOOc"><img src="https://img.youtube.com/vi/KTbq-G3HOOc/0.jpg" width="320"></a> | <a href="https://www.youtube.com/watch?v=_Ttfazh5eC8"><img src="https://img.youtube.com/vi/_Ttfazh5eC8/0.jpg" width="320"></a> |
+| <a href="https://www.youtube.com/watch?v=UybjJaZkl9c"><img src="https://img.youtube.com/vi/UybjJaZkl9c/0.jpg" width="320"></a> | |
 
 ## Video
 
@@ -70,16 +71,16 @@ The real bottleneck is the board's single 16-bit SDR SDRAM chip, shared between 
 | | |
 |---|---|
 | **Voodoo variant** | Voodoo 1 (SST-1) only |
-| **Pipeline** | Highly pipelined: rasterizer → TMU → pixel shader → depth buffer → framebuffer, valid/ready handshaking with inter-stage FIFOs |
+| **Pipeline** | Highly pipelined: triangle setup → rasterizer → TMU → pixel shader → depth buffer → framebuffer, valid/ready handshaking with inter-stage FIFOs |
 | **FPGA target** | ULX3S (Lattice ECP5 LFE5U-85F, 32MB SDRAM) |
 | **Display** | 640×480@60Hz HDMI (DVI-D), RGB565 framebuffer, 8-line circular SDRAM prefetch FIFO |
 | **Language** | SystemVerilog |
-| **Code size** | ~25,600 lines, 46 RTL modules |
+| **Code size** | ~30,000 lines of RTL |
 | **Synthesis** | Open-source toolchain (Yosys, yosys-slang, nextpnr-ecp5) |
 | **Verification** | Verilator testbenches, Glide trace replay, PCem bridge for real-time verification |
-| **Clocks** | 25 MHz VGA/HDMI pixel output (125 MHz TMDS shift); single 91.67 MHz render + SDRAM clock domain. Timing closure achieved through deep pipelining, registered-DSP retiming, and floorplanning. |
+| **Clocks** | 25 MHz VGA/HDMI pixel output (125 MHz TMDS shift); single 100 MHz render + SDRAM clock domain. Timing closure achieved through deep pipelining, registered-DSP retiming, and floorplanning. |
 | **Memory subsystem** | Custom SDRAM controller on the shared render clock (CL=3), 7-client fully-pipelined arbiter with per-client request FIFOs and address-derived bank interleaving to overlap command overhead with data. Each pipeline stage accesses SDRAM directly — no rendering caches — matching the original Voodoo 1 architecture. |
-| **FPGA resources** | 51% LUTs, 41% FFs, 36% BRAM, 58% DSP (ECP5-85F) |
+| **FPGA resources** | 52% LUTs, 43% FFs, 36% BRAM, 58% DSP (ECP5-85F) |
 
 ## Simulation
 
@@ -87,9 +88,7 @@ The design is verified using [Verilator](https://github.com/verilator/verilator)
 
 ## Status
 
-Started in August 2025. First 3D render (teapot) in October 2025. Valley of Ra demo and Unreal Tournament running in February 2026. ECP5-85F synthesis and place-and-route with timing closure at 50/100 MHz in March 2026. First bring-up on the ULX3S board with HDMI output in April 2026. Pipeline and memory subsystem re-architected into a single-clock, cacheless design in June 2026, with the clock raised to 91.67 MHz in July 2026.
-
-The 3D rendering pipeline is functional and runs Glide 2.x games correctly, place-and-route is [complete](https://www.youtube.com/watch?v=dOeNav5UjCw), and the design is now [running](https://www.youtube.com/watch?v=_Ttfazh5eC8) on the ULX3S board.
+Started in August 2025. First 3D render (teapot) in October 2025. Valley of Ra demo and Unreal Tournament running in February 2026. ECP5-85F synthesis and place-and-route with timing closure at 50/100 MHz in March 2026. First bring-up on the ULX3S board with HDMI output in April 2026. Pipeline and memory subsystem re-architected into a single-clock, cacheless design in June 2026, with the clock raised to 100 MHz in August 2026.
 
 All code written by [Claude Code](https://claude.ai).
 
