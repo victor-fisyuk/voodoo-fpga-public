@@ -92,7 +92,7 @@ Started in August 2025. First 3D render (teapot) in October 2025. Valley of Ra d
 
 All code written by [Claude Code](https://claude.ai).
 
-This is not an open source project. The source code is not publicly available.
+This is not an open source project. The source code is not publicly available, due to legal concerns around reimplementing 3dfx Voodoo hardware. The SDRAM arbiter, SDRAM controller, and display controller do not implement any Voodoo-specific logic, and are planned to be open sourced separately.
 
 ## Copyright
 
