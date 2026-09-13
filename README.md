@@ -99,3 +99,19 @@ This is not an open source project. The source code is not publicly available, d
 Created by [Victor Fisyuk](https://github.com/victor-fisyuk).
 
 3dfx, Voodoo, and Glide are trademarks of 3dfx Interactive, Inc., now owned by Nvidia Corporation. This project is not affiliated with or endorsed by Nvidia. All other trademarks are the property of their respective owners. This is an independent reimplementation for educational and hobbyist purposes.
+
+## My Voodoo Collection
+
+Original 3dfx Voodoo hardware from my personal collection, which inspired this project.
+
+| | |
+|:---:|:---:|
+| ![Voodoo card](screenshots/voodoo-001.jpg) | ![Voodoo card](screenshots/voodoo-002.jpg) |
+| ![Voodoo card](screenshots/voodoo-003.jpg) | ![Voodoo card](screenshots/voodoo-004.jpg) |
+| ![Voodoo card](screenshots/voodoo-005.jpg) | ![Voodoo card](screenshots/voodoo-006.jpg) |
+| ![Voodoo card](screenshots/voodoo-007.jpg) | ![Voodoo card](screenshots/voodoo-008.jpg) |
+| ![Voodoo card](screenshots/voodoo-009.jpg) | ![Voodoo card](screenshots/voodoo-010.jpg) |
+| ![Voodoo card](screenshots/voodoo-011.jpg) | ![Voodoo card](screenshots/voodoo-012.jpg) |
+| ![Voodoo card](screenshots/voodoo-013.jpg) | ![Voodoo card](screenshots/voodoo-014.jpg) |
+| ![Voodoo card](screenshots/voodoo-015.jpg) | ![Voodoo card](screenshots/voodoo-016.jpg) |
+| ![Voodoo card](screenshots/voodoo-017.jpg) | |
