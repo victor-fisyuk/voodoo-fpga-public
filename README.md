@@ -10,19 +10,35 @@ The design running on real hardware: a [Radiona ULX3S](https://radiona.org/ulx3s
 
 The Voodoo core was re-architected to run faster and to follow the original Voodoo 1 hardware more closely. The rendering pipeline and the SDRAM subsystem, which previously ran on separate clocks (a 50 MHz pipeline and a 100 MHz memory subsystem), now share a single clock domain that has been progressively raised — currently **100&nbsp;MHz** — through deeper pipelining, registered-DSP retiming, and floorplanning. The intermediate rendering caches (texture, depth, and framebuffer) were removed entirely — every pipeline stage now reads and writes SDRAM directly through a fully-pipelined, per-client arbiter. Previously a cache miss stalled the whole pipeline until the data arrived; now each stage issues its memory accesses without blocking and hides the SDRAM latency, so a slow memory access no longer stalls the work behind it.
 
-To measure the genuine speed of the FPGA Voodoo core itself, a pre-recorded Tomb Raider Glide command stream was replayed directly from an SD card, bypassing the host link entirely. In this mode the game runs at about 8-15 FPS in gameplay on the ULX3S — the actual throughput of the Voodoo pipeline on this board — and 30 FPS on the much simpler title screen.
+To measure the genuine speed of the FPGA Voodoo core itself, pre-recorded Glide command streams from real games are replayed directly from the board's SD card, bypassing the host PC entirely (see [FPS in Real Games](#fps-in-real-games)). The traces are stored in a compact run-encoded format and streamed over a 50 MHz SPI link through an on-chip FIFO, which removes most of the host-link overhead. An on-screen overlay shows the current frame rate together with per-game min/avg/max, and an optional performance panel breaks down where the cycles go.
 
-With a host PC driving the FPGA over the 2 Mbaud UART debug link, the observed frame rate drops below 1 FPS: the UART is the dominant bottleneck in that setup.
+The main bottleneck is the board's single 16-bit SDR SDRAM chip, shared between framebuffer reads and writes, depth, texture, and the display controller.
 
-The real bottleneck is the board's single 16-bit SDR SDRAM chip, shared between framebuffer reads and writes, depth, texture, and the display controller. Long-term, the goal is to retarget to a PCIe + DDR FPGA card; PCIe and DDR lift both ceilings and put playable frame rates within reach.
+Long-term, the goal is to retarget to a PCIe + DDR FPGA card. The likely target is the [ALINX AX7A200B](https://www.en.alinx.com/Product/FPGA-Development-Boards/Artix-7/AX7A200B.html) board — an AMD/Xilinx Artix-7 XC7A200T with 1 GB of 32-bit DDR3 and a PCIe Gen2 x2 edge connector, so the card can plug into a modern Windows 10/11 PC, with a custom kernel driver exposing the card to the stock Glide 2.x DLL. PCIe provides a real host link for playing games (the SD-card replay is for demos and testing only), and DDR3 removes the memory-bandwidth limit, putting playable frame rates within reach.
 
 | | |
 |:---:|:---:|
-| <img src="screenshots/ulx3s.jpg" width="320"> | <a href="https://www.youtube.com/watch?v=kYiTO4DXEKA"><img src="https://img.youtube.com/vi/kYiTO4DXEKA/0.jpg" width="320"></a> |
-| <a href="https://www.youtube.com/watch?v=KTbq-G3HOOc"><img src="https://img.youtube.com/vi/KTbq-G3HOOc/0.jpg" width="320"></a> | <a href="https://www.youtube.com/watch?v=_Ttfazh5eC8"><img src="https://img.youtube.com/vi/_Ttfazh5eC8/0.jpg" width="320"></a> |
-| <a href="https://www.youtube.com/watch?v=UybjJaZkl9c"><img src="https://img.youtube.com/vi/UybjJaZkl9c/0.jpg" width="320"></a> | |
+| <img src="screenshots/ulx3s.jpg" width="320"> | <a href="https://www.youtube.com/watch?v=H-VcHg60m8U"><img src="https://img.youtube.com/vi/H-VcHg60m8U/0.jpg" width="320"></a> |
+| <a href="https://www.youtube.com/watch?v=kYiTO4DXEKA"><img src="https://img.youtube.com/vi/kYiTO4DXEKA/0.jpg" width="320"></a> | <a href="https://www.youtube.com/watch?v=KTbq-G3HOOc"><img src="https://img.youtube.com/vi/KTbq-G3HOOc/0.jpg" width="320"></a> |
+| <a href="https://www.youtube.com/watch?v=_Ttfazh5eC8"><img src="https://img.youtube.com/vi/_Ttfazh5eC8/0.jpg" width="320"></a> | <a href="https://www.youtube.com/watch?v=UybjJaZkl9c"><img src="https://img.youtube.com/vi/UybjJaZkl9c/0.jpg" width="320"></a> |
 
-## Video
+## FPS in Real Games
+
+Frame rates measured on the ULX3S (100 MHz render clock) with each game's Glide command stream replayed from the SD card.
+
+| Game / scene | FPS avg | FPS max |
+|---|--:|--:|
+| Tomb Raider | 20 | 30 |
+| Quake | 14 | 20 |
+| Quake II | 11 | 15 |
+| Unreal | 8 | 12 |
+| Unreal Tournament — Oblivion | 8 | 12 |
+| Unreal Tournament — Intro | 9 | 20 |
+| 3DMark99 — Race | 10 | 10 |
+| Fight (3dfx demo) | 12 | 12 |
+| Racing (3dfx demo) | 15 | 20 |
+
+## Video (Simulation)
 
 <a href="https://www.youtube.com/watch?v=CwztiOZkOVs"><img src="https://img.youtube.com/vi/CwztiOZkOVs/0.jpg" width="320"></a>
 <a href="https://www.youtube.com/watch?v=hXsq-mxo13E"><img src="https://img.youtube.com/vi/hXsq-mxo13E/0.jpg" width="320"></a>
@@ -31,7 +47,7 @@ The real bottleneck is the board's single 16-bit SDR SDRAM chip, shared between 
 <a href="https://www.youtube.com/watch?v=mtOpSOZ3h8I"><img src="https://img.youtube.com/vi/mtOpSOZ3h8I/0.jpg" width="320"></a>
 <a href="https://www.youtube.com/watch?v=dOeNav5UjCw"><img src="https://img.youtube.com/vi/dOeNav5UjCw/0.jpg" width="320"></a>
 
-## Screenshots
+## Screenshots (Simulation)
 
 ### Games
 
@@ -80,7 +96,8 @@ The real bottleneck is the board's single 16-bit SDR SDRAM chip, shared between 
 | **Verification** | Verilator testbenches, Glide trace replay, PCem bridge for real-time verification |
 | **Clocks** | 25 MHz VGA/HDMI pixel output (125 MHz TMDS shift); single 100 MHz render + SDRAM clock domain. Timing closure achieved through deep pipelining, registered-DSP retiming, and floorplanning. |
 | **Memory subsystem** | Custom SDRAM controller on the shared render clock (CL=3), 7-client fully-pipelined arbiter with per-client request FIFOs and address-derived bank interleaving to overlap command overhead with data. Each pipeline stage accesses SDRAM directly — no rendering caches — matching the original Voodoo 1 architecture. |
-| **FPGA resources** | 52% LUTs, 43% FFs, 36% BRAM, 58% DSP (ECP5-85F) |
+| **Host interface** | Glide trace replay from the onboard SD card |
+| **FPGA resources** | 60% LUTs, 46% FFs, 39% BRAM, 58% DSP (ECP5-85F) |
 
 ## Simulation
 
@@ -88,7 +105,7 @@ The design is verified using [Verilator](https://github.com/verilator/verilator)
 
 ## Status
 
-Started in August 2025. First 3D render (teapot) in October 2025. Valley of Ra demo and Unreal Tournament running in February 2026. ECP5-85F synthesis and place-and-route with timing closure at 50/100 MHz in March 2026. First bring-up on the ULX3S board with HDMI output in April 2026. Pipeline and memory subsystem re-architected into a single-clock, cacheless design in June 2026, with the clock raised to 100 MHz in August 2026.
+Started in August 2025. First 3D render (teapot) in October 2025. Valley of Ra demo and Unreal Tournament running in February 2026. ECP5-85F synthesis and place-and-route with timing closure at 50/100 MHz in March 2026. First bring-up on the ULX3S board with HDMI output in April 2026. Pipeline and memory subsystem re-architected into a single-clock, cacheless design in June 2026, with the clock raised to 100 MHz in August 2026. In October 2026 the SDRAM scheduling was improved for higher frame rates, the SD-card trace replay was sped up, and on-screen FPS statistics and a performance panel were added.
 
 All code written by [Claude Code](https://claude.ai).
 
