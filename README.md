@@ -4,6 +4,8 @@ A SystemVerilog reimplementation of the 3dfx Voodoo Graphics 3D accelerator for 
 
 This project implements the complete Voodoo 1 3D graphics pipeline in synthesizable RTL. The implementation is based on analysis of the original hardware specifications and the [PCem](https://github.com/sarah-walker-pcem/pcem) emulator's Voodoo emulation code.
 
+To the best of my knowledge, Voodoo FPGA is the first publicly demonstrated 3dfx Voodoo 1 reimplementation to render real 3D applications to a display from a real FPGA (April 26, 2026). It is also the first Voodoo on a Lattice ECP5 / ULX3S, built entirely with open-source FPGA tools, and the first shown running its rendering pipeline at 100&nbsp;MHz on any FPGA (August 2026).
+
 ## Voodoo on ULX3S FPGA
 
 The design running on real hardware: a [Radiona ULX3S](https://radiona.org/ulx3s/) board with a Lattice ECP5 FPGA, driving an HDMI monitor.
