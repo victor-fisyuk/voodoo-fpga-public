@@ -10,7 +10,7 @@ To the best of my knowledge, Voodoo FPGA is the first publicly demonstrated 3dfx
 
 The design running on real hardware: a [Radiona ULX3S](https://radiona.org/ulx3s/) board with a Lattice ECP5 FPGA, driving an HDMI monitor.
 
-The Voodoo core was re-architected to run faster and to follow the original Voodoo 1 hardware more closely. The rendering pipeline and the SDRAM subsystem, which previously ran on separate clocks (a 50 MHz pipeline and a 100 MHz memory subsystem), now share a single clock domain that has been progressively raised — currently **100&nbsp;MHz** — through deeper pipelining, registered-DSP retiming, and floorplanning. The intermediate rendering caches (texture, depth, and framebuffer) were removed entirely — every pipeline stage now reads and writes SDRAM directly through a fully-pipelined, per-client arbiter. Previously a cache miss stalled the whole pipeline until the data arrived; now each stage issues its memory accesses without blocking and hides the SDRAM latency, so a slow memory access no longer stalls the work behind it.
+The Voodoo core was re-architected to run faster and to follow the original Voodoo 1 hardware more closely. The rendering pipeline and the SDRAM subsystem, which previously ran on separate clocks (a 50 MHz pipeline and a 100 MHz memory subsystem), now share a single clock domain that has been progressively raised — currently **100&nbsp;MHz** — through deeper pipelining, registered-DSP retiming, and floorplanning. The intermediate rendering caches (texture, depth, and framebuffer) were removed entirely — every pipeline stage now reads and writes SDRAM directly through a fully-pipelined, per-client arbiter (the separate bilinear-filtering version adds back a non-blocking texture cache). Previously a cache miss stalled the whole pipeline until the data arrived; now each stage issues its memory accesses without blocking and hides the SDRAM latency, so a slow memory access no longer stalls the work behind it.
 
 To measure the genuine speed of the FPGA Voodoo core itself, pre-recorded Glide command streams from real games are replayed directly from the board's SD card, bypassing the host PC entirely (see [FPS in Real Games](#fps-in-real-games)). The traces are stored in a compact run-encoded format and streamed over a 50 MHz SPI link through an on-chip FIFO, which removes most of the host-link overhead. An on-screen overlay shows the current frame rate together with per-game min/avg/max, and an optional performance panel breaks down where the cycles go.
 
@@ -20,13 +20,14 @@ Long-term, the goal is to retarget to a PCIe + DDR FPGA card. The likely target 
 
 | | |
 |:---:|:---:|
-| <img src="screenshots/ulx3s.jpg" width="320"> | <a href="https://www.youtube.com/watch?v=H-VcHg60m8U"><img src="https://img.youtube.com/vi/H-VcHg60m8U/0.jpg" width="320"></a> |
-| <a href="https://www.youtube.com/watch?v=kYiTO4DXEKA"><img src="https://img.youtube.com/vi/kYiTO4DXEKA/0.jpg" width="320"></a> | <a href="https://www.youtube.com/watch?v=KTbq-G3HOOc"><img src="https://img.youtube.com/vi/KTbq-G3HOOc/0.jpg" width="320"></a> |
-| <a href="https://www.youtube.com/watch?v=_Ttfazh5eC8"><img src="https://img.youtube.com/vi/_Ttfazh5eC8/0.jpg" width="320"></a> | <a href="https://www.youtube.com/watch?v=UybjJaZkl9c"><img src="https://img.youtube.com/vi/UybjJaZkl9c/0.jpg" width="320"></a> |
+| <img src="screenshots/ulx3s.jpg" width="320"> | <a href="https://www.youtube.com/watch?v=ZE4rPW7IYaE"><img src="https://img.youtube.com/vi/ZE4rPW7IYaE/0.jpg" width="320"></a> |
+| <a href="https://www.youtube.com/watch?v=H-VcHg60m8U"><img src="https://img.youtube.com/vi/H-VcHg60m8U/0.jpg" width="320"></a> | <a href="https://www.youtube.com/watch?v=kYiTO4DXEKA"><img src="https://img.youtube.com/vi/kYiTO4DXEKA/0.jpg" width="320"></a> |
+| <a href="https://www.youtube.com/watch?v=KTbq-G3HOOc"><img src="https://img.youtube.com/vi/KTbq-G3HOOc/0.jpg" width="320"></a> | <a href="https://www.youtube.com/watch?v=_Ttfazh5eC8"><img src="https://img.youtube.com/vi/_Ttfazh5eC8/0.jpg" width="320"></a> |
+| <a href="https://www.youtube.com/watch?v=UybjJaZkl9c"><img src="https://img.youtube.com/vi/UybjJaZkl9c/0.jpg" width="320"></a> | |
 
 ## FPS in Real Games
 
-Frame rates measured on the ULX3S (100 MHz render clock) with each game's Glide command stream replayed from the SD card.
+Frame rates measured on the ULX3S with the default (point-sampled) version (100 MHz render clock) with each game's Glide command stream replayed from the SD card.
 
 | Game / scene | FPS avg | FPS max |
 |---|--:|--:|
@@ -39,6 +40,8 @@ Frame rates measured on the ULX3S (100 MHz render clock) with each game's Glide 
 | 3DMark99 — Race | 10 | 10 |
 | Fight (3dfx demo) | 12 | 12 |
 | Racing (3dfx demo) | 15 | 20 |
+
+The bilinear-filtering version with the texture cache runs at the same or slightly higher frame rates (about 1–3 FPS more on average).
 
 ## Video (Simulation)
 
@@ -89,7 +92,7 @@ Frame rates measured on the ULX3S (100 MHz render clock) with each game's Glide 
 | | |
 |---|---|
 | **Voodoo variant** | Voodoo 1 (SST-1) only |
-| **Pipeline** | Highly pipelined: triangle setup → rasterizer → TMU → pixel shader → depth buffer → framebuffer, valid/ready handshaking with inter-stage FIFOs |
+| **Pipeline** | Highly pipelined: triangle setup → rasterizer → TMU (point-sampled or bilinear filtering) → pixel shader → depth buffer → framebuffer, valid/ready handshaking with inter-stage FIFOs |
 | **FPGA target** | ULX3S (Lattice ECP5 LFE5U-85F, 32MB SDRAM) |
 | **Display** | 640×480@60Hz HDMI (DVI-D), RGB565 framebuffer, 8-line circular SDRAM prefetch FIFO |
 | **Language** | SystemVerilog |
@@ -97,9 +100,9 @@ Frame rates measured on the ULX3S (100 MHz render clock) with each game's Glide 
 | **Synthesis** | Open-source toolchain (Yosys, yosys-slang, nextpnr-ecp5) |
 | **Verification** | Verilator testbenches, Glide trace replay, PCem bridge for real-time verification |
 | **Clocks** | 25 MHz VGA/HDMI pixel output (125 MHz TMDS shift); single 100 MHz render + SDRAM clock domain. Timing closure achieved through deep pipelining, registered-DSP retiming, and floorplanning. |
-| **Memory subsystem** | Custom SDRAM controller on the shared render clock (CL=3), 7-client fully-pipelined arbiter with per-client request FIFOs and address-derived bank interleaving to overlap command overhead with data. Each pipeline stage accesses SDRAM directly — no rendering caches — matching the original Voodoo 1 architecture. |
+| **Memory subsystem** | Custom SDRAM controller on the shared render clock (CL=3), 7-client fully-pipelined arbiter with per-client request FIFOs and address-derived bank interleaving to overlap command overhead with data. In the default version, each pipeline stage accesses SDRAM directly — no rendering caches — matching the original Voodoo 1 architecture. The bilinear-filtering version adds a non-blocking on-chip texture cache. |
 | **Host interface** | Glide trace replay from the onboard SD card |
-| **FPGA resources** | 60% LUTs, 46% FFs, 39% BRAM, 58% DSP (ECP5-85F) |
+| **FPGA resources** | 60% LUTs, 46% FFs, 39% BRAM, 58% DSP; with bilinear filtering: 81% LUTs, 58% FFs, 62% BRAM, 64% DSP (ECP5-85F) |
 
 ## Simulation
 
@@ -107,7 +110,7 @@ The design is verified using [Verilator](https://github.com/verilator/verilator)
 
 ## Status
 
-Started in August 2025. First 3D render (teapot) in October 2025. Valley of Ra demo and Unreal Tournament running in February 2026. ECP5-85F synthesis and place-and-route with timing closure at 50/100 MHz in March 2026. First bring-up on the ULX3S board with HDMI output in April 2026. Pipeline and memory subsystem re-architected into a single-clock, cacheless design in June 2026, with the clock raised to 100 MHz in August 2026. In October 2026 the SDRAM scheduling was improved for higher frame rates, the SD-card trace replay was sped up, and on-screen FPS statistics and a performance panel were added.
+Started in August 2025. First 3D render (teapot) in October 2025. Valley of Ra demo and Unreal Tournament running in February 2026. ECP5-85F synthesis and place-and-route with timing closure at 50/100 MHz in March 2026. First bring-up on the ULX3S board with HDMI output in April 2026. Pipeline and memory subsystem re-architected into a single-clock, cacheless design in June 2026, with the clock raised to 100 MHz in August 2026. In October 2026 the SDRAM scheduling was improved for higher frame rates, the SD-card trace replay was sped up, and on-screen FPS statistics, a performance panel, and a separate bilinear-filtering version with a texture cache were added.
 
 All code written by [Claude Code](https://claude.ai).
 
