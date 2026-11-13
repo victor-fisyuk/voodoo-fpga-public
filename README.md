@@ -40,6 +40,7 @@ Frame rates measured on the ULX3S with the default (point-sampled) version at a 
 | 3DMark99 — Race | 15 | 15 |
 | Fight (3dfx demo) | 20 | 20 |
 | Racing (3dfx demo) | 20 | 22 |
+| Screamer 2 | 19 | 20 |
 
 At 100 MHz, the bilinear-filtering version with the texture cache ran at the same or slightly higher frame rates than the point-sampled version (about 1–3 FPS more on average).
 
