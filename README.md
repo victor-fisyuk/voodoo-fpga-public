@@ -29,18 +29,18 @@ Long-term, the goal is to retarget to a PCIe + DDR FPGA card. The likely target 
 
 Frame rates measured on the ULX3S with the default (point-sampled) version at a 130 MHz render clock, replaying each game's Glide command stream from the SD card.
 
-| Game / scene | FPS avg | FPS max |
-|---|--:|--:|
-| Tomb Raider | 30 | 30 |
-| Quake | 19 | 30 |
-| Quake II | 16 | 20 |
-| Unreal | 11 | 15 |
-| Unreal Tournament — Oblivion | 12 | 15 |
-| Unreal Tournament — Intro | 13 | 20 |
-| 3DMark99 — Race | 15 | 15 |
-| Fight (3dfx demo) | 20 | 20 |
-| Racing (3dfx demo) | 20 | 22 |
-| Screamer 2 | 19 | 20 |
+| Game / scene | FPS avg | FPS max | Uncapped FPS avg | Uncapped FPS max |
+|---|--:|--:|--:|--:|
+| Tomb Raider | 30 | 30 | 37 | 46 |
+| Quake | 19 | 30 | 23 | 36 |
+| Quake II | 16 | 20 | 18 | 25 |
+| Unreal | 11 | 15 | 12 | 18 |
+| Unreal Tournament — Oblivion | 12 | 15 | 13 | 18 |
+| Unreal Tournament — Intro | 13 | 20 | 14 | 27 |
+| 3DMark99 — Race | 15 | 15 | 16 | 18 |
+| Fight (3dfx demo) | 20 | 20 | 25 | 25 |
+| Racing (3dfx demo) | 20 | 22 | 27 | 30 |
+| Screamer 2 | 19 | 20 | 23 | 27 |
 
 At 100 MHz, the bilinear-filtering version with the texture cache ran at the same or slightly higher frame rates than the point-sampled version (about 1–3 FPS more on average).
 
